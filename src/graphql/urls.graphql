@@ -1,0 +1,8 @@
+mutation CreateUrl($target: String!, $slug: String) {
+  createUrl(input: { target: $target, slug: $slug }) {
+    id
+    slug
+    target
+    visits
+  }
+}
