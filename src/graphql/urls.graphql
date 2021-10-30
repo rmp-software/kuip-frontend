@@ -1,3 +1,20 @@
+query Urls {
+  urls {
+    edges {
+      node {
+        id
+        slug
+        target
+        visits
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}
+
 mutation CreateUrl($target: String!, $slug: String) {
   createUrl(input: { target: $target, slug: $slug }) {
     id

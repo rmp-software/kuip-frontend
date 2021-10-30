@@ -12,23 +12,33 @@ import {
 } from '@material-ui/core'
 
 import Iterate from '../components/iterate'
+import {
+  Url,
+  UrlsDocument,
+  UrlsQuery,
+  UrlsQueryVariables,
+} from '../generated/graphql'
+import { client } from '../lib/api-client'
 
-interface PageProps {}
+interface PageProps {
+  urls: Url[]
+}
 
-const ProductListPage: NextPage<PageProps> = ({}) => {
+const ProductListPage: NextPage<PageProps> = ({ urls }) => {
+  console.log({ urls })
   return (
     <>
       <Head>
-        <title>List - App Store</title>
+        <title>Kuip - Short and easy</title>
       </Head>
 
       <Typography component="h1" variant="h3" color="textPrimary" gutterBottom>
-        Products
+        Links
       </Typography>
       <Grid container spacing={4}>
         <Iterate
-          data={[{ id: 1 }]}
-          keyExtractor={(product) => product.id}
+          data={urls}
+          keyExtractor={(url) => url.id}
           render={() => (
             <Grid item xs={12} sm={6} md={4}>
               <Card>
@@ -65,6 +75,18 @@ const ProductListPage: NextPage<PageProps> = ({}) => {
       </Grid>
     </>
   )
+}
+
+export const getServerSideProps: GetServerSideProps<PageProps> = async () => {
+  const { data } = await client.query<UrlsQuery, UrlsQueryVariables>({
+    query: UrlsDocument,
+  })
+
+  return {
+    props: {
+      urls: data.urls as Url[],
+    },
+  }
 }
 
 export default ProductListPage
